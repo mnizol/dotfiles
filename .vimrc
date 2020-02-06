@@ -40,3 +40,7 @@ colorscheme palenight
 
 " Windows clipboard mappings
 map <C-V> "+gP
+
+" Pretty print XML
+com! PrettyXML :%! python -c "import xml.dom.minidom as dom; xml = dom.parse('%'); print(xml.toprettyxml());"
+
