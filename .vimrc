@@ -42,8 +42,13 @@ colorscheme palenight
 map <C-V> "+gP
 
 " Pretty print XML
-function PrettyXML()
-    %! python -c "import xml.dom.minidom as dom; xml = dom.parse('%'); print(xml.toprettyxml());"
+function! PrettyXML()
+    %! python -c "from lxml import etree as e; 
+                \ root = e.parse('%').getroot(); 
+                \ _ = [setattr(node, 'text', node.text.strip()) for node in root.iter('*') if node.text is not None];
+                \ _ = [setattr(node, 'tail', node.tail.strip()) for node in root.iter('*') if node.tail is not None];
+                \ e.indent(root, space='\t');
+                \ print(e.tostring(root).decode());" 
     set foldmethod=indent
 endfunction
 
